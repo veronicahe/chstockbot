@@ -23,3 +23,4 @@ def symbol_avgs_yahoo (symbol:str, avgs:list):
 
 for symbol in stock_data:
     print (symbol_avgs_yahoo(stock_data[0],stock_data[1:]))
+    
