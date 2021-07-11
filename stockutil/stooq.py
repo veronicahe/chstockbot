@@ -88,9 +88,10 @@ def search_file(rule=".txt", path='.')->list:
                 all.append(filename)
     return all
 
-def symbol_above_moving_average(symbol,ma=50,path="~/Downloads/data",end=datetime.date.today()):
+def symbol_above_moving_average(symbol,ma=20,path="~/Downloads/data",end=datetime.date(2021,7,2)):
     """
-    获取一个股票代码是否高于指定的历史平均价。返回True高于avg，Flase低于avg
+    获取一个股票代码是否高于指定的历史平均价。返回True高于avg，False低于avg
+
 
     Parameters
     ----------
@@ -98,9 +99,9 @@ def symbol_above_moving_average(symbol,ma=50,path="~/Downloads/data",end=datetim
         股票代码
     filepath : str
         stooq离线文件存储的目录路径
-    avg : int, default 50
+    avg : int, default 50 (换成20因为OGN没有50周期数据)
         计算的历史时长，默认为50MA
-    end : datetime.date, default today
+    end : datetime.date, default today（换成7/2因为上周下载收据只到上周五）
         计算到的截止日期，默认为当天
     """
     err_msg = ""
@@ -127,7 +128,7 @@ if __name__ == '__main__':
     #print(read_stooq_file(path=tiker_file[0]))
     #print(download_file())
     try:
-        print(symbol_above_moving_average("qqq",50,path="~/Downloads/data",end=datetime.date(2021,6,15)))
+        print(symbol_above_moving_average("qqq",50,path="~/Downloads/data",end=datetime.date(2021,7,2)))
     except maNotEnoughError as err:
         print(err)
     except markCloseError as err:

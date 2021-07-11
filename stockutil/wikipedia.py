@@ -1,3 +1,4 @@
+from datetime import datetime
 import pickle
 import pandas as pd
 import stooq
@@ -21,9 +22,9 @@ def get_sp500_tickers():
     return df['Symbol'].tolist()
 
 def get_ndx100_tickers():
-    table = pd.read_html('https://www.nasdaq.com/market-activity/quotes/Nasdaq-100-Index-Components')
-    df = table[0]
-    return df['Symbol'].tolist() 
+    table = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100#Components')
+    df = table[3]
+    return df['Ticker'].tolist()
 
 def save_list(list,filename):
     # with open("sp500tickers.pickle", "wb") as f:
@@ -41,13 +42,20 @@ if __name__ == '__main__':
     # 本程序只是用于测试，正常使用请from stockutil import wikipedia
     sp500 = get_sp500_tickers()
     ndx100 = get_ndx100_tickers()
-    # indexes = [sp500,ndx100]
-    # up = []
-    # down = []
-    # for index in indexes:
-    #     for symbol in index:
-    #         if stooq.symbol_above_moving_average(symbol):
-    #             up.append(symbol)
-    #         else:
-    #             down.append(symbol)
-    # print(f"{index}共有{len(up)+len(down)}支股票，共有{len(up)/(len(up)+len(down))*100:.2f}%高于50周期均线")
+    indexes = [sp500,ndx100]
+    indexnames = ["SP500","NDX100"]
+    up = []
+    down = []
+    for index in indexes:
+        for symbol in index:
+            if stooq.symbol_above_moving_average(symbol):
+                up.append(symbol)
+            else:
+                down.append(symbol)
+        for name in indexnames:
+            print(f"{name}共有{len(up)+len(down)}支股票，共有{len(up)/(len(up)+len(down))*100:.2f}%高于20周期均线")
+            #两个index的名字会在没重跑50行的for loop之前先跑一次 导致结果“SP500共有505支股票 NDX100共有505支股票 SP500共有102支股票 NDX100共有102支股票”
+        up.clear()
+        down.clear()
+
+    #还做了一个超级大的骚操作 把stooq下载到本地的文档BRK-B和BF-B文件名改成BRK.B和BF.B 因为wiki上的格式是.B而不是-B
